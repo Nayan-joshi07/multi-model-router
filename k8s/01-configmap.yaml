@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: router-config
+  namespace: llm-router
+data:
+  ROUTER_STRATEGY: "rules"
+  FALLBACK_CHAIN: "claude,gpt-mini,gemini,mock-smart"
+  REQUEST_TIMEOUT_S: "30"

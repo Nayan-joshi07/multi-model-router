@@ -1,0 +1,9 @@
+cat > .gitignore <<'EOF'
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+lambda/.aws-sam/
+k8s/02-secret.yaml
+EOF

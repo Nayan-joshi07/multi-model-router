@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Multi-Model Router on AWS Lambda (container image + Function URL)
+
+Parameters:
+  AnthropicKey: {Type: String, NoEcho: true, Default: ""}
+  OpenAIKey:    {Type: String, NoEcho: true, Default: ""}
+  GeminiKey:    {Type: String, NoEcho: true, Default: ""}
+
+Resources:
+  RouterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      MemorySize: 512
+      Timeout: 60
+      Architectures: [x86_64]
+      Environment:
+        Variables:
+          ROUTER_STRATEGY: rules
+          ANTHROPIC_API_KEY: !Ref AnthropicKey   # for learning; use Secrets Manager in prod
+          OPENAI_API_KEY: !Ref OpenAIKey
+          GEMINI_API_KEY: !Ref GeminiKey
+      FunctionUrlConfig:
+        AuthType: NONE        # public for testing only; switch to AWS_IAM for real use
+    Metadata:
+      Dockerfile: lambda/Dockerfile
+      DockerContext: ..
+      DockerTag: v1
+
+Outputs:
+  RouterUrl:
+    Value: !GetAtt RouterFunctionUrl.FunctionUrl
